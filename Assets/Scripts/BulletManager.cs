@@ -22,7 +22,7 @@ public class BulletManager : MonoBehaviour
         {
             FireProjectile(bullet01);
         }
-        if (Input.GetKeyDown(KeyCode.X) && !bullet01.gameObject.activeSelf)
+        if (Input.GetKeyDown(KeyCode.X) && !bullet02.gameObject.activeSelf)
         {
             FireProjectile(bullet02);
         }
