@@ -14,6 +14,10 @@ public class ProjectileBehavior : MonoBehaviour
     public float TimeToDespawn = 1f;
     public int damage;
 
+    [Header("Sub Bullets")] //this could be done in arrays but I'm lazy
+    [SerializeField] ProjectileBehavior subBullet1;
+    [SerializeField] ProjectileBehavior subBullet2;
+
     private IEnumerator despawnTimer;
 
     // Start is called before the first frame update
@@ -41,6 +45,8 @@ public class ProjectileBehavior : MonoBehaviour
     {
         transform.position = startPosition;
         transform.Translate(hOffset * hTileLength, vOffset * vTileHeight, 0f);
+        FireSubBullet(subBullet1, startPosition);
+        FireSubBullet(subBullet2, startPosition);
     }
     private IEnumerator StartDespawnTimer()
     {
@@ -52,6 +58,31 @@ public class ProjectileBehavior : MonoBehaviour
     private void Despawn()
     {
         Debug.Log("Despawn Timer Finished.");
+        StopAllCoroutines();
         this.gameObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Bullet has hit something.");
+        EnemyHealth enemy = other.GetComponent<EnemyHealth>();
+        if(enemy != null)
+        {
+            //add code for reducing health here
+            if (VanishOnHit == true)
+            {
+                Debug.Log("Projectile disappears.");
+                this.Despawn();
+                this.gameObject.SetActive(false);
+            }
+        }
+    }
+    private void FireSubBullet(ProjectileBehavior bullet, Vector3 startPosition) //pass bullet to fire and start position
+    {
+        if (bullet != null)
+        {
+            bullet.gameObject.SetActive(true);
+            bullet.SetBulletActive(startPosition);
+        }
     }
 }

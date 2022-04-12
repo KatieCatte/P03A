@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         Debug.Log($"vpos: {vGridPosit}");
+        Debug.Log($"Zpos: {transform.position.z}");
     }
 
     // Update is called once per frame
@@ -29,13 +30,13 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow) && vGridPosit > 1)
             {
-                transform.Translate(0f, vDistance, -1f);
+                transform.Translate(0f, vDistance, -0f);
                 vGridPosit -= 1;
                 Debug.Log($"vpos: {vGridPosit}");
             }
             if (Input.GetKeyDown(KeyCode.DownArrow) && vGridPosit < vGridMax)
             {
-                transform.Translate(0f, -vDistance, 1f);
+                transform.Translate(0f, -vDistance, 0f);
                 vGridPosit += 1;
                 Debug.Log($"vpos: {vGridPosit}");
             }
