@@ -532,6 +532,7 @@ GameObject:
   - component: {fileID: 202532997}
   - component: {fileID: 202532996}
   - component: {fileID: 202532998}
+  - component: {fileID: 202532999}
   m_Layer: 0
   m_Name: PlayerChara
   m_TagString: Untagged
@@ -572,7 +573,10 @@ MonoBehaviour:
   hGridPosit: 1
   vGridMax: 4
   hGridMax: 4
-  moveInterval: 0.05
+  moveInterval: 0.1
+  ctrlActive: 1
+  moving: 0
+  anim: {fileID: 202532999}
 --- !u!61 &202532995
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -633,6 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 709a872618cbc154e9a01e879424b1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 202532999}
   bullet01: {fileID: 643782213}
   bullet02: {fileID: 1030565130}
   bullet03: {fileID: 817060058}
@@ -651,6 +656,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deck: {fileID: 202532996}
   shooter: {fileID: 202532997}
+  mover: {fileID: 202532994}
+  shuffleTime: 2
+--- !u!114 &202532999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202532992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7bb054ccea0b6747947f20762a772e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSprite: {fileID: 1155452781}
+  playerNeutral: {fileID: 21300000, guid: 262a8e65a264a7040b729e32dc8c4f96, type: 3}
+  playerMoveForward: {fileID: 21300000, guid: 8c43d24b1546b1740934d5db79260b3a, type: 3}
+  playerMoveBack: {fileID: 21300000, guid: a3c74b239e749f44a82d9f51dc78a277, type: 3}
+  playerShoot1: {fileID: 21300000, guid: 3f6c33f5261db3e43b17184144e46201, type: 3}
+  playerShoot2: {fileID: 21300000, guid: c17359e5dc8e67e4a9dff4e8eb474f38, type: 3}
+  playerShoot3: {fileID: 21300000, guid: 21082be2902cde949ba5aed19ff5145f, type: 3}
+  shootInterval: 0.05
 --- !u!1 &226620854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1058,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6997ef0c790405d47bcfdbba1f6b5928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyMaxHP: 80
+  enemyHP: 0
 --- !u!61 &439182733
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1111,7 +1140,7 @@ MonoBehaviour:
   vTileHeight: 1.2
   VanishOnHit: 1
   TimeToDespawn: 0.3
-  damage: 0
+  damage: 20
   subBullet1: {fileID: 0}
   subBullet2: {fileID: 0}
 --- !u!50 &468266447
@@ -1215,7 +1244,7 @@ MonoBehaviour:
   vTileHeight: 1.2
   VanishOnHit: 1
   TimeToDespawn: 0.3
-  damage: 0
+  damage: 20
   subBullet1: {fileID: 1564019746}
   subBullet2: {fileID: 468266446}
 --- !u!50 &472984322
@@ -1671,7 +1700,7 @@ MonoBehaviour:
   vTileHeight: 1.2
   VanishOnHit: 1
   TimeToDespawn: 0.3
-  damage: 0
+  damage: 20
   subBullet1: {fileID: 0}
   subBullet2: {fileID: 0}
 --- !u!61 &643782214
@@ -2121,7 +2150,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 763749493}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1083344544}
@@ -2339,7 +2368,7 @@ MonoBehaviour:
   vTileHeight: 1.2
   VanishOnHit: 0
   TimeToDespawn: 0.25
-  damage: 0
+  damage: 20
   subBullet1: {fileID: 0}
   subBullet2: {fileID: 0}
 --- !u!61 &817060059
@@ -3124,7 +3153,7 @@ MonoBehaviour:
   vTileHeight: 1.2
   VanishOnHit: 0
   TimeToDespawn: 0.2
-  damage: 0
+  damage: 40
   subBullet1: {fileID: 0}
   subBullet2: {fileID: 0}
 --- !u!61 &1030565131
@@ -4226,7 +4255,7 @@ MonoBehaviour:
   vTileHeight: 1.2
   VanishOnHit: 1
   TimeToDespawn: 0.3
-  damage: 0
+  damage: 20
   subBullet1: {fileID: 0}
   subBullet2: {fileID: 0}
 --- !u!50 &1564019747

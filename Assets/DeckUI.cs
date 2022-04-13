@@ -20,7 +20,7 @@ public class DeckUI : MonoBehaviour
 
     Dictionary<string, Sprite> icons = new Dictionary<string, Sprite>(); //there has GOT to be a better way to do this lmao
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         icons.Add("Fire", Icon_Fire);
         icons.Add("Ice", Icon_Ice);

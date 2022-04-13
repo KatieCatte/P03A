@@ -69,6 +69,7 @@ public class ProjectileBehavior : MonoBehaviour
         if(enemy != null)
         {
             //add code for reducing health here
+            enemy.changeHP(-damage);
             if (VanishOnHit == true)
             {
                 Debug.Log("Projectile disappears.");

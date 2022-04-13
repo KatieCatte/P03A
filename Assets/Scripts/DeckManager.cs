@@ -134,6 +134,13 @@ public class DeckManager : MonoBehaviour
             deckUI.SetSlotRes2("Empty");
         }
     }
+    public void EmptyDisplay()
+    {
+        deckUI.SetSlotZ("Empty");
+        deckUI.SetSlotX("Empty");
+        deckUI.SetSlotRes1("Empty");
+        deckUI.SetSlotRes2("Empty");
+    }
 
     public void SwapZSkill()
     {

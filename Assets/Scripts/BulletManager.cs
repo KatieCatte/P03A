@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BulletManager : MonoBehaviour
 {
+    [SerializeField] AnimationManager anim;
     [SerializeField] ProjectileBehavior bullet01;
     [SerializeField] ProjectileBehavior bullet02;
     [SerializeField] ProjectileBehavior bullet03;
@@ -31,6 +32,7 @@ public class BulletManager : MonoBehaviour
     {
         if (!bullets[bulletID].gameObject.activeSelf)
         {
+            anim.StartCoroutine(anim.ShootAnimation());
             bullets[bulletID].gameObject.SetActive(true);
             bullets[bulletID].SetBulletActive(transform.position);
         }
