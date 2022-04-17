@@ -8,6 +8,7 @@ public class ProjectileBehavior : MonoBehaviour
     public float vSpeed = 0f;
     public float hOffset = 0f;
     public float vOffset = 0f;
+    public float zOffset = 0f;
     public float hTileLength = 1.7f;
     public float vTileHeight = 1.2f;
     public bool VanishOnHit = true;
@@ -17,6 +18,8 @@ public class ProjectileBehavior : MonoBehaviour
     [Header("Sub Bullets")] //this could be done in arrays but I'm lazy
     [SerializeField] ProjectileBehavior subBullet1;
     [SerializeField] ProjectileBehavior subBullet2;
+
+    [SerializeField] AudioSource shootsfx;
 
     private IEnumerator despawnTimer;
 
@@ -44,7 +47,8 @@ public class ProjectileBehavior : MonoBehaviour
     public void SetBulletActive(Vector3 startPosition)
     {
         transform.position = startPosition;
-        transform.Translate(hOffset * hTileLength, vOffset * vTileHeight, 0f);
+        transform.Translate(hOffset * hTileLength, vOffset * vTileHeight, zOffset);
+        if (shootsfx != null) { shootsfx.Play(); }
         FireSubBullet(subBullet1, startPosition);
         FireSubBullet(subBullet2, startPosition);
     }

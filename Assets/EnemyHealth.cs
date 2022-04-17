@@ -5,11 +5,26 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     public int enemyMaxHP = 40;
-    public int enemyHP;
+    private int enemyHP;
+
+    //these sprites should go in a separate animation manager in a real game
+    private SpriteRenderer enemySprite;
+    [SerializeField] Sprite normalSprite;
+    [SerializeField] Sprite damagedSprite;
+    [SerializeField] float flinchTime;
+    private BoxCollider2D coll;
+    [SerializeField] HitsparkManager hitspark;
+    [SerializeField] HitsparkManager diespark;
+    [SerializeField] AudioSource hurtsfx;
+    [SerializeField] AudioSource diesfx;
+
     // Start is called before the first frame update
     void Start()
     {
         enemyHP = enemyMaxHP;
+        enemySprite = this.GetComponentInChildren<SpriteRenderer>();
+        coll = this.GetComponent<BoxCollider2D>();
+        
     }
 
     // Update is called once per frame
@@ -24,7 +39,12 @@ public class EnemyHealth : MonoBehaviour
         if(enemyHP <= 0)
         {
             enemyHP = 0;
-            Perish();
+        }
+        if (hpchange < 0)
+        {
+            StopCoroutine(damageAnim());
+            StartCoroutine(damageAnim());
+            
         }
         if(enemyHP > enemyMaxHP)
         {
@@ -35,5 +55,29 @@ public class EnemyHealth : MonoBehaviour
     public void Perish()
     {
         this.gameObject.SetActive(false);
+    }
+    private IEnumerator damageAnim()
+    {
+        enemySprite.sprite = damagedSprite;
+        if (enemyHP <= 0)
+        {
+            diesfx.Play();
+            coll.enabled = false;
+            diespark.gameObject.SetActive(true);
+            enemySprite.sprite = null;
+        }
+        else {
+            hurtsfx.Play();
+            hitspark.gameObject.SetActive(true); 
+        }
+        yield return new WaitForSeconds(flinchTime);
+        if(enemyHP == 0)
+        {
+            this.gameObject.SetActive(false);
+        }
+        else
+        {
+            enemySprite.sprite = normalSprite;
+        }
     }
 }

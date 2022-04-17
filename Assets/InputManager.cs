@@ -8,6 +8,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] DeckManager deck;
     [SerializeField] BulletManager shooter;
     [SerializeField] PlayerMovement mover;
+    [SerializeField] AudioManager audioManager;
+    [SerializeField] ShuffleIcon shuffleIcon;
     public float shuffleTime = 2f;
 
     private void Start()
@@ -67,24 +69,28 @@ public class InputManager : MonoBehaviour
                 StartCoroutine(mover.MoveToGrid(0f, mover.vDistance));
                 mover.vGridPosit -= 1;
                 Debug.Log($"vpos: {mover.vGridPosit}");
+                audioManager.PlayMoveSFX();
             }
             if (Input.GetKeyDown(KeyCode.DownArrow) && mover.vGridPosit < mover.vGridMax)
             {
                 StartCoroutine(mover.MoveToGrid(0f, -mover.vDistance));
                 mover.vGridPosit += 1;
                 Debug.Log($"vpos: {mover.vGridPosit}");
+                audioManager.PlayMoveSFX();
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow) && mover.hGridPosit > 1)
             {
                 StartCoroutine(mover.MoveToGrid(-mover.hDistance, 0f));
                 mover.hGridPosit -= 1;
                 Debug.Log($"hpos: {mover.hGridPosit}");
+                audioManager.PlayMoveSFX();
             }
             if (Input.GetKeyDown(KeyCode.RightArrow) && mover.hGridPosit < mover.hGridMax)
             {
                 StartCoroutine(mover.MoveToGrid(mover.hDistance, 0f));
                 mover.hGridPosit += 1;
                 Debug.Log($"hpos: {mover.hGridPosit}");
+                audioManager.PlayMoveSFX();
             }
         }
     }
@@ -93,8 +99,14 @@ public class InputManager : MonoBehaviour
     {
         canShoot = false;
         deck.EmptyDisplay();
+        audioManager.PlayShuffle1SFX();
+        Debug.Log("Shuffle Started");
+        shuffleIcon.StartSpinning();
         yield return new WaitForSeconds(timer);
         deck.ShuffleDeck();
         canShoot = true;
+        audioManager.PlayShuffle2SFX();
+        Debug.Log("Shuffle ended");
+        shuffleIcon.StopSpinning();
     }
 }
