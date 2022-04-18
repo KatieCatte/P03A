@@ -27,6 +27,7 @@ public class DeckManager : MonoBehaviour
 
     private Card[] mainDeck;
     private Card[] ActiveDeck;
+    private int[] iconIndex;
     private void Awake()
     {
         //card01 = new Card(card01name, card01bullet);
@@ -39,7 +40,20 @@ public class DeckManager : MonoBehaviour
         mainDeck[2] = new Card(card03name, card03bullet);
         mainDeck[3] = new Card(card04name, card04bullet);
         ActiveDeck = new Card[mainDeck.Length];
-        
+
+        /*iconIndex:
+         * array that will connect each card in the deck to an icon
+         * starting values - 0, 1, 2, 3
+         * call the icon at [i]
+         * starts out saying, icon 0 is at 0, but then after that, [0] will be 2
+        */
+        iconIndex = new int[4];
+        for (int i = 0; i < iconIndex.Length; i++)
+        {
+            iconIndex[i] = i;
+        }
+
+
     }
     // Start is called before the first frame update
     void Start()
@@ -50,10 +64,7 @@ public class DeckManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            ShuffleDeck();
-        }
+        
     }
 
     public void ShuffleDeck()
@@ -62,16 +73,24 @@ public class DeckManager : MonoBehaviour
         UpdateDisplay();
         for(int i = 0; i < mainDeck.Length; i++)
         {
-            int rnd = Random.Range(0, ActiveDeck.Length);
-            if (ActiveDeck[rnd] == null)
+            int rnd = Random.Range(0, ActiveDeck.Length); //pick a random active deck slot
+            if (ActiveDeck[rnd] == null) //if it isn't already full...
             {
-                ActiveDeck[rnd] = mainDeck[i];
+                ActiveDeck[rnd] = mainDeck[i]; //assign card to active deck slot 
             }
             else
             {
-                i--;
+                i--; //if the slot isn't empty, rewind, reroll for a slot that IS empty
             }
+
+            //reset order of icon index values, too
+            for (int j = 0; j < iconIndex.Length; j++)
+            {
+                iconIndex[j] = j;
+            }
+
         }
+        deckUI.Refresh();
         UpdateDisplay();
     }
 
@@ -79,10 +98,10 @@ public class DeckManager : MonoBehaviour
     {
         for (int i = 0; i < mainDeck.Length; i++)
         {
-            int rnd = Random.Range(0, ActiveDeck.Length);
-            if (ActiveDeck[rnd] == null)
+            int rnd = Random.Range(0, ActiveDeck.Length); //pick a random active deck slot
+            if (ActiveDeck[rnd] == null) //if it isn't already full...
             {
-                ActiveDeck[rnd] = mainDeck[i];
+                ActiveDeck[rnd] = mainDeck[i]; //assign card to active deck slot 
             }
             else
             {
@@ -102,44 +121,30 @@ public class DeckManager : MonoBehaviour
 
     private void UpdateDisplay()
     {
-        if(ActiveDeck[0] != null) { 
-            deckUI.SetSlotZ(ActiveDeck[0].GetName());
-        }
-        else
+        for(int b = 0; b < ActiveDeck.Length; b++)
         {
-            deckUI.SetSlotZ("Empty");
+            if (ActiveDeck[b] != null)
+            {
+                deckUI.SetSlot(b, ActiveDeck[b].GetName());
+            }
+            else
+            {
+                deckUI.SetSlot(b, "Null");
+            }
         }
-        if (ActiveDeck[1] != null)
-        {
-            deckUI.SetSlotX(ActiveDeck[1].GetName());
-        }
-        else
-        {
-            deckUI.SetSlotX("Empty");
-        }
-        if (ActiveDeck[2] != null)
-        {
-            deckUI.SetSlotRes1(ActiveDeck[2].GetName());
-        }
-        else
-        {
-            deckUI.SetSlotRes1("Empty");
-        }
-        if (ActiveDeck[3] != null)
-        {
-            deckUI.SetSlotRes2(ActiveDeck[3].GetName());
-        }
-        else
-        {
-            deckUI.SetSlotRes2("Empty");
-        }
+
     }
     public void EmptyDisplay()
     {
-        deckUI.SetSlotZ("Empty");
-        deckUI.SetSlotX("Empty");
-        deckUI.SetSlotRes1("Empty");
-        deckUI.SetSlotRes2("Empty");
+        /*deckUI.SetSlot(0, "Null");
+        deckUI.SetSlot(1, "Null");
+        deckUI.SetSlot(2, "Null");
+        deckUI.SetSlot(3, "Null");
+        older version, do not use*/
+        for(int a = 0; a < iconIndex.Length; a++)
+        {
+            deckUI.EmptySlot(a);
+        }
     }
 
     public void SwapZSkill()
@@ -149,6 +154,30 @@ public class DeckManager : MonoBehaviour
         ActiveDeck[3] = null;
         UpdateDisplay();
     }
+
+    //for testing
+    public void LoadSkill(int slot) //if this is 0...
+    {
+        
+        deckUI.EmptySlot(iconIndex[slot]); //empty whatever icon is in slot 0
+        ActiveDeck[slot] = ActiveDeck[2]; //active card in slot 0 takes on value of slot 2
+        if (ActiveDeck[2] != null) //if there was a card in slot 2
+        {
+            deckUI.MoveSlot(iconIndex[2], slot); //move icon in index 2 to the slot that just got used
+            iconIndex[slot] = iconIndex[2]; //icon index 0 gets the value of icon index 2
+        }
+        ActiveDeck[2] = ActiveDeck[3]; //move card 3 to spot 2
+        if (ActiveDeck[3] != null) //if there was a card in slot 3
+        {
+            deckUI.MoveSlot(iconIndex[3], 2); //move icon in index 2 to the slot that just got used
+            iconIndex[2] = iconIndex[3]; //icon index 0 gets the value of icon index 2}
+            ActiveDeck[3] = null;
+            iconIndex[3] = 0;
+        }
+
+
+    }
+
     public void SwapXSkill()
     {
         ActiveDeck[1] = ActiveDeck[2];
