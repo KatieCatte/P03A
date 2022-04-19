@@ -14,6 +14,7 @@ public class DeckUI : MonoBehaviour
 
     public GameObject[] iconSlots = new GameObject[4]; //saves positions for where each icon goes
     public Icon[] iconPanels = new Icon[4];
+    public SpriteRenderer[] miniIcons = new SpriteRenderer[2];
 
     [Header("Icons")]
     [SerializeField] Sprite Icon_Empty;
@@ -47,65 +48,24 @@ public class DeckUI : MonoBehaviour
         
     }
 
-    public void SetSlotZ(string icon)
-    {
-        if (icons.ContainsKey(icon)) { 
-            card_slot_Z.sprite = icons[icon];
-        }
-        else
-        {
-            card_slot_Z.sprite = icons["Empty"];
-            Debug.Log("No data for Z skill icon");
-        }
-        
-    }
-    public void SetSlotX(string icon)
-    {
-        if (icons.ContainsKey(icon))
-        {
-            card_slot_X.sprite = icons[icon];
-        }
-        else
-        {
-            card_slot_X.sprite = icons["Empty"];
-            Debug.Log("No data for X skill icon");
-        }
-    }
-    public void SetSlotRes1(string icon)
-    {
-        if (icons.ContainsKey(icon))
-        {
-            card_slot_reserve_1.sprite = icons[icon];
-        }
-        else
-        {
-            card_slot_reserve_1.sprite = icons["Empty"];
-            Debug.Log("No data for reserve icon 1");
-        }
-    }
-    public void SetSlotRes2(string icon)
-    {
-        if (icons.ContainsKey(icon))
-        {
-            card_slot_reserve_2.sprite = icons[icon];
-        }
-        else
-        {
-            card_slot_reserve_2.sprite = icons["Empty"];
-            Debug.Log("No data for reserve icon 2");
-        }
-    }
-
     public void SetSlot(int slot, string icon)
     {
         if (icons.ContainsKey(icon))
         {
             iconPanels[slot].setSprite(icons[icon]);
+            if(slot<=1 && slot >= 0)
+            {
+                miniIcons[slot].sprite = icons[icon];
+            }
         }
         else
         {
-            iconPanels[slot].setSprite(icons["Nothing"]);
+            iconPanels[slot].setSprite(icons["Null"]);
             Debug.Log("No data for icon slot");
+            if (slot <= 1 && slot >= 0)
+            {
+                miniIcons[slot].sprite = icons["Empty"];
+            }
         }
     }
 
@@ -124,6 +84,18 @@ public class DeckUI : MonoBehaviour
             iconPanels[i].SetPosition(iconSlots[i].transform.position);
             iconPanels[i].SetRotation(0f);
         }
+    }
+
+    public void SetMiniSlot(int slot, string icon)
+    {
+        miniIcons[slot].sprite = icons[icon];
+    }
+
+    public void EmptyMiniSlots()
+    {
+        miniIcons[0].sprite = icons["Empty"];
+        miniIcons[1].sprite = icons["Empty"];
+        Debug.Log("Mini slots emptied");
     }
 
     //public void loadZSlot()

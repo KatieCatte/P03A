@@ -83,7 +83,7 @@ public class DeckManager : MonoBehaviour
                 i--; //if the slot isn't empty, rewind, reroll for a slot that IS empty
             }
 
-            //reset order of icon index values, too
+            //reset order of icon index values, too. set order of icons back to 0, 1, 2, 3
             for (int j = 0; j < iconIndex.Length; j++)
             {
                 iconIndex[j] = j;
@@ -145,37 +145,32 @@ public class DeckManager : MonoBehaviour
         {
             deckUI.EmptySlot(a);
         }
-    }
-
-    public void SwapZSkill()
-    {
-        ActiveDeck[0] = ActiveDeck[2];
-        ActiveDeck[2] = ActiveDeck[3];
-        ActiveDeck[3] = null;
-        UpdateDisplay();
+        deckUI.EmptyMiniSlots();
     }
 
     //for testing
-    public void LoadSkill(int slot) //if this is 0...
+    public void LoadSkill(int slot) //only use 0 or 1 for this
     {
-        
-        deckUI.EmptySlot(iconIndex[slot]); //empty whatever icon is in slot 0
-        ActiveDeck[slot] = ActiveDeck[2]; //active card in slot 0 takes on value of slot 2
-        if (ActiveDeck[2] != null) //if there was a card in slot 2
+        deckUI.EmptySlot(iconIndex[slot]); //empty whatever icon is in slot 0 (using 0 as example)
+        ActiveDeck[slot] = ActiveDeck[2]; //active card in slot 0 takes on value of slot 2 (it has to be slot 2, only valid slot for loading into 0 or 1
+        if (ActiveDeck[2] != null) //if there was a card in slot 2-
         {
             deckUI.MoveSlot(iconIndex[2], slot); //move icon in index 2 to the slot that just got used
-            iconIndex[slot] = iconIndex[2]; //icon index 0 gets the value of icon index 2
+            iconIndex[slot] = iconIndex[2]; //icon index 0 gets the value of icon index 2; skill 2's icon is now icon 0, old icon 0 is just gone
         }
         ActiveDeck[2] = ActiveDeck[3]; //move card 3 to spot 2
         if (ActiveDeck[3] != null) //if there was a card in slot 3
         {
             deckUI.MoveSlot(iconIndex[3], 2); //move icon in index 2 to the slot that just got used
-            iconIndex[2] = iconIndex[3]; //icon index 0 gets the value of icon index 2}
+            iconIndex[2] = iconIndex[3]; //icon index 2 gets the value of icon index 3
             ActiveDeck[3] = null;
             iconIndex[3] = 0;
-        }
+        } //if the deck's size is greater than 4 or unknown, this could probably be done as a for loop. Don't need it just yet for this small test deck though
 
-
+        //this part is just for changing out the mini icons
+        if (ActiveDeck[slot] != null) { 
+            deckUI.SetMiniSlot(slot, ActiveDeck[slot].GetName()); 
+        } else { deckUI.SetMiniSlot(slot, "Empty"); }
     }
 
     public void SwapXSkill()

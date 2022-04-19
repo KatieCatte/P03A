@@ -31,7 +31,7 @@ public class Icon : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (state == 1) {
             transform.position = Vector2.MoveTowards(transform.position, targetLocation, swapSpeed);
