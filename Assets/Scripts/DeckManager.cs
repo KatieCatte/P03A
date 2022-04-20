@@ -6,28 +6,37 @@ public class DeckManager : MonoBehaviour
 {
     [SerializeField] DeckUI deckUI;
     [SerializeField] BulletManager bulletManager;
-    //insert list for main deck
-    //insert list for active deck
+
     [Header("Card 01")]
     private Card card01;
     [SerializeField] string card01name;
     [SerializeField] int card01bullet;
+    [SerializeField] int card01cost;
     [Header("Card 02")]
     private Card card02;
     [SerializeField] string card02name;
     [SerializeField] int card02bullet;
+    [SerializeField] int card02cost;
     [Header("Card 03")]
     private Card card03;
     [SerializeField] string card03name;
     [SerializeField] int card03bullet;
+    [SerializeField] int card03cost;
     [Header("Card 04")]
     private Card card04;
     [SerializeField] string card04name;
     [SerializeField] int card04bullet;
+    [SerializeField] int card04cost;
+
+    //public Card[] mainDeck2 = new Card[4];
+    //just make this a public array if you want a version that can have more things
 
     private Card[] mainDeck;
     private Card[] ActiveDeck;
     private int[] iconIndex;
+    //use lists for the deck if you want to add cards
+    //god I'd have to redo the whole icon system though
+
     private void Awake()
     {
         //card01 = new Card(card01name, card01bullet);
@@ -35,10 +44,14 @@ public class DeckManager : MonoBehaviour
         //card03 = new Card(card03name, card03bullet);
         //card04 = new Card(card04name, card04bullet);
         mainDeck = new Card[4];
-        mainDeck[0] = new Card(card01name, card01bullet);
-        mainDeck[1] = new Card(card02name, card02bullet);
-        mainDeck[2] = new Card(card03name, card03bullet);
-        mainDeck[3] = new Card(card04name, card04bullet);
+        mainDeck[0] = new Card(card01name, card01bullet, card01cost);
+        mainDeck[1] = new Card(card02name, card02bullet, card02cost);
+        mainDeck[2] = new Card(card03name, card03bullet, card03cost);
+        mainDeck[3] = new Card(card04name, card04bullet, card04cost);
+        
+
+        
+
         ActiveDeck = new Card[mainDeck.Length];
 
         /*iconIndex:
@@ -125,11 +138,11 @@ public class DeckManager : MonoBehaviour
         {
             if (ActiveDeck[b] != null)
             {
-                deckUI.SetSlot(b, ActiveDeck[b].GetName());
+                deckUI.SetSlot(b, ActiveDeck[b].GetName(), ActiveDeck[b].GetCost());
             }
             else
             {
-                deckUI.SetSlot(b, "Null");
+                deckUI.SetSlot(b, "Null",0);
             }
         }
 
@@ -191,21 +204,36 @@ public class DeckManager : MonoBehaviour
         }
         else { return true; }
     }
+
+    public int CostOfSlot(int slot)
+    {
+        if (ActiveDeck[slot] != null)
+        {
+            return ActiveDeck[slot].GetCost();
+        }
+        else { return 0; }
+    }
 }
 
 public class Card
 {
     public string name;
     public int bulletID;
+    public int cost;
 
-    public Card(string cardname, int bullet)
+    public Card(string cardname, int bullet, int MPcost)
     {
         name = cardname;
         bulletID = bullet;
+        cost = MPcost;
     }
 
     public string GetName()
     {
         return name;
+    }
+    public int GetCost()
+    {
+        return cost;
     }
 }

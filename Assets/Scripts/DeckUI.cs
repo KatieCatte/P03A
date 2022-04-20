@@ -13,6 +13,7 @@ public class DeckUI : MonoBehaviour
 
 
     public GameObject[] iconSlots = new GameObject[4]; //saves positions for where each icon goes
+    //if you need more icons, write code to determine slots 3+ based on position of slot 2, plus y
     public Icon[] iconPanels = new Icon[4];
     public SpriteRenderer[] miniIcons = new SpriteRenderer[2];
 
@@ -48,11 +49,12 @@ public class DeckUI : MonoBehaviour
         
     }
 
-    public void SetSlot(int slot, string icon)
+    public void SetSlot(int slot, string icon, int cost)
     {
         if (icons.ContainsKey(icon))
         {
             iconPanels[slot].setSprite(icons[icon]);
+            iconPanels[slot].setCost(cost);
             if(slot<=1 && slot >= 0)
             {
                 miniIcons[slot].sprite = icons[icon];

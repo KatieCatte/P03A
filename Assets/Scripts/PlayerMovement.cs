@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveInterval = 0.2f;
 
     public bool ctrlActive = true;
-    private Vector2 targetLocation;
+    private Vector3 targetLocation;
     public bool moving = false;
 
     [SerializeField] AnimationManager anim;
@@ -25,57 +25,33 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log($"Zpos: {transform.position.z}");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        /**if (ctrlActive)
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow) && vGridPosit > 1)
-            {
-                StartCoroutine(MoveToGrid(0f, vDistance));
-                vGridPosit -= 1;
-                Debug.Log($"vpos: {vGridPosit}");
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow) && vGridPosit < vGridMax)
-            {
-                StartCoroutine(MoveToGrid(0f, -vDistance));
-                vGridPosit += 1;
-                Debug.Log($"vpos: {vGridPosit}");
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && hGridPosit > 1)
-            {
-                StartCoroutine(MoveToGrid(-hDistance, 0f));
-                hGridPosit -= 1;
-                Debug.Log($"hpos: {hGridPosit}");
-            }
-            if (Input.GetKeyDown(KeyCode.RightArrow) && hGridPosit < hGridMax)
-            {
-                StartCoroutine(MoveToGrid(hDistance, 0f));
-                hGridPosit += 1;
-                Debug.Log($"hpos: {hGridPosit}");
-            }
-        }*/
-    }
-
     private void FixedUpdate()
     {
         if (moving == true)
         {
-            transform.position = Vector2.MoveTowards(transform.position, targetLocation, hDistance / 2);
+            float dist = Vector3.Distance(transform.position, targetLocation) / 2;
+            if (dist > hDistance * 0.05) {
+                transform.position = Vector3.MoveTowards(transform.position, targetLocation, dist);
+            }
+            else
+            {
+                transform.position = targetLocation;
+                anim.SetPoseNeutral();
+                moving = false;
+                ctrlActive = true;
+            }
         }
     }
 
     public IEnumerator MoveToGrid(float xMove, float yMove)
     {
-        targetLocation = new Vector2(transform.position.x + xMove, transform.position.y + yMove);
+        targetLocation = new Vector3(transform.position.x + xMove, transform.position.y + yMove, transform.position.z);
         anim.SetAnimationDirection(xMove, yMove);
         moving = true;
         ctrlActive = false;
         yield return new WaitForSeconds(moveInterval);
-        anim.SetPoseNeutral();
-        moving = false;
-        ctrlActive = true;
-        targetLocation = transform.position;
+        
+        //targetLocation = transform.position;
     }
 
     

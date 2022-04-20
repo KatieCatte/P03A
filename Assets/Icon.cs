@@ -20,6 +20,8 @@ public class Icon : MonoBehaviour
     public float swapSpeed;
     public float rotationSpeed;
     private float currentSpin;
+
+    public Text costText;
     // Start is called before the first frame update
     void Awake()
     {
@@ -54,6 +56,7 @@ public class Icon : MonoBehaviour
 
     public void SetPosition(Vector2 target)
     {
+        StopAllCoroutines();
         transform.position = target;
         state = 0;
     }
@@ -66,7 +69,6 @@ public class Icon : MonoBehaviour
     public void PopIconOut()
     {
         if (state != 2) {
-            StopAllCoroutines();
             StartCoroutine(Iconfall());
         }
     }
@@ -90,5 +92,10 @@ public class Icon : MonoBehaviour
     public void setSprite(Sprite icon)
     {
         image.sprite = icon;
+    }
+
+    public void setCost(int cost)
+    {
+        costText.text = $"{cost}";
     }
 }

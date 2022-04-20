@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] PlayerMovement mover;
     [SerializeField] AudioManager audioManager;
     [SerializeField] ShuffleIcon shuffleIcon;
+    [SerializeField] ManaSystem mana;
     public float shuffleTime = 2f;
     public float shootTime = 0.1f;
 
@@ -25,13 +26,11 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && canShoot)
         {
             if (deck.IsSlotFilled(0)) {
-                shooter.FireProjectile(deck.GetCardBulletID(0));
-                deck.LoadSkill(0);
+                FireSlot(0);
             }
             else if (deck.IsSlotFilled(1))
             {
-                shooter.FireProjectile(deck.GetCardBulletID(1));
-                deck.LoadSkill(1);
+                FireSlot(1);
             }
             if(!deck.IsSlotFilled(0) && !deck.IsSlotFilled(1))
             {
@@ -39,7 +38,7 @@ public class InputManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(ShotCooldown());
+                StartCoroutine(ShotCooldown(shootTime));
             }
             
         }
@@ -47,13 +46,11 @@ public class InputManager : MonoBehaviour
         {
             if (deck.IsSlotFilled(1))
             {
-                shooter.FireProjectile(deck.GetCardBulletID(1));
-                deck.LoadSkill(1);
+                FireSlot(1);
             }
             else if (deck.IsSlotFilled(0))
             {
-                shooter.FireProjectile(deck.GetCardBulletID(0));
-                deck.LoadSkill(0);
+                FireSlot(0);
             }
             if (!deck.IsSlotFilled(0) && !deck.IsSlotFilled(1))
             {
@@ -61,7 +58,7 @@ public class InputManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(ShotCooldown());
+                StartCoroutine(ShotCooldown(shootTime));
             }
 
         }
@@ -112,6 +109,10 @@ public class InputManager : MonoBehaviour
                 deck.LoadSkill(0);
             }
         }
+        /*if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            //add code here for restarting scene just in case, I think  
+        }*/
     }
 
     private IEnumerator CombatShuffleDeck(float timer)
@@ -128,10 +129,25 @@ public class InputManager : MonoBehaviour
         Debug.Log("Shuffle ended");
         shuffleIcon.StopSpinning();
     }
-    private IEnumerator ShotCooldown()
+    private IEnumerator ShotCooldown(float time)
     {
         canShoot = false;
-        yield return new WaitForSeconds(shootTime);
+        yield return new WaitForSeconds(time);
         canShoot = true;
+    }
+
+    private void FireSlot(int slot)
+    {
+        if (mana.currentMP >= deck.CostOfSlot(slot))
+        {
+            shooter.FireProjectile(deck.GetCardBulletID(slot));
+            mana.changeMP(-deck.CostOfSlot(slot));
+            deck.LoadSkill(slot);
+            
+        }
+        else
+        {
+            audioManager.PlayShuffle2SFX();
+        }
     }
 }
