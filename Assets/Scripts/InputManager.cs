@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
@@ -109,10 +110,14 @@ public class InputManager : MonoBehaviour
                 deck.LoadSkill(0);
             }
         }
-        /*if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //add code here for restarting scene just in case, I think  
-        }*/
+            Application.Quit();
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     private IEnumerator CombatShuffleDeck(float timer)
